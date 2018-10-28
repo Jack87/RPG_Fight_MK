@@ -1,6 +1,202 @@
 * {
     box-sizing: border-box;
- }
- html {
-    height: 100%;
-}
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    user-select: none; }
+  
+  /* Fonts */
+  @font-face {
+    font-family: 'mortal_kombat_1regular';
+    src: url('../fonts/mortalkombat1-webfont.woff2') format('woff2'),
+          url('../fonts/mortalkombat1-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal; }
+  
+  /* Page Structure */
+  html, body {
+    background-color: #050505e5;
+    font-family:  "mortal_kombat_1regular", "Helvetica Neue", "Helvetica", sans-serif; }
+  section {
+    display: block;
+    height: 100vh; }
+  .logo {
+    position: relative;
+    top: 10px;
+    opacity: 0.75;
+    height: 200px;
+    width: auto; }
+  /* End Page Structure */
+  
+  /* Button Appearance */
+  button {
+    border: 2px solid #5519f8;
+    color: #b90f0f;
+    font-size: 28px;
+    text-transform: uppercase;
+    padding: 5px;
+    font-family: "mortal_kombat_1regular", "Helvetica Neue", "Helvetica", sans-serif;
+    background: none;
+    cursor: pointer;
+    transition: all .2s ease; 
+  }
+    button:hover {
+      background-color: #367dda;
+      opacity: 0.75;
+      color: #2d00cf;
+      cursor: pointer; 
+    }
+    button:focus {
+      outline: none;
+      outline-color: none; 
+    }
+  button.disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    pointer-events: none; }
+  /* End Button Apperance */
+  
+  /* Classes as Properties */
+  .disable {
+    pointer-events: none;
+    cursor: default; }
+  .player {
+    background-color: #299ec9;
+    box-shadow: 0 0 35px #299ec9, 0 0 50px #800080; }
+  .opponent {
+    background-color: #cf4f39;
+    box-shadow: 0 0 35px #cf4f39, 0 0 50px #800080; }
+  .defeated {
+    box-shadow: none;
+    opacity: .3; }
+  /* End Classes as Properties */
+  
+  /* Wrapper */
+  #wrapper {
+    display: none;
+    background: url("../images/bg_MK_Pit.jpg");
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed; }
+   #container {
+      position: relative;
+      width: 960px;
+      margin: 0 auto;
+      padding: 0;
+      text-align: center; }
+      .pageTitle {
+        position: fixed;
+        top: 55px;
+        height: 120px;
+        width: 960px;
+        z-index: 1000; }
+  
+      /* Fighter Selection */
+      #selectionScreen {
+        position: relative; }
+        #selectionFeedBack {
+          position: relative;
+          top: 335px;
+          font-family: "mortal_kombat_1regular", "Helvetica Neue", "Helvetica", sans-serif;
+          text-transform: uppercase;
+          color: #88ff00;
+          text-shadow: 2px 5px 5px #140d34;
+          font-size: 42px;
+          margin-bottom: 20px; }
+        #fighters {
+          background: url("../images/MK_Choose_Fighter960px.png");
+          position: relative;
+          top: 340px;
+          height: 350px;
+          z-index: 1400; }
+      /* End Fighter Selection */
+      
+      /* Arena */
+      #arenaScreen {
+        position: relative;
+        top: 0px; }
+         #arena {
+          position: relative;
+          width: 960px; }
+          #battleFeedBack {
+            height: 1px;
+            position: relative;
+            top: 350px;
+            font-family: "mortal_kombat_1regular", "Helvetica Neue", "Helvetica", sans-serif;
+            text-transform: uppercase;
+            line-height: 36px;
+            color: #88ff00;
+            text-shadow: 2px 5px 5px #140d34;
+            font-size: 32px; }
+          #battleStage {
+            position: relative;
+            top: 485px; }
+            #battleStage .card {
+              width: 200px;
+              display: inline-block; }
+            #battleStage .player {
+              position: relative;
+              right: 100px; }
+            #battleStage .opponent {
+              position: relative;
+              left: 100px; }
+          #arena #attack {
+            position: relative;
+            top: 180px; }
+        /* End Arena */
+      
+      /* End Game */
+      #endGameScreen {
+        position: relative;
+        top: 0px; }
+        #gameOver {
+          position: relative; }
+          #endGameFeedBack {
+            height: 75px;
+            position: relative;
+            top: 275px;
+            font-family: "mortal_kombat_1regular", "Helvetica Neue", "Helvetica", sans-serif;
+            text-transform: uppercase;
+            line-height: 48px;
+            color: #88ff00;
+            text-shadow: 2px 5px 5px #140d34;
+            font-size: 42px; 
+            margin-bottom: 15px;}
+          #gameOver #showcase {
+            position: relative;
+            top: 435px;
+            right:100px;
+            transform: scale(1.2); }
+          #gameOver #reset {
+            position: relative;
+            top: 495px; }
+      /* End End Game */
+  /* End Wrapper */
+  
+  /* Fighter Card */
+  .card {
+    display: inline-block;
+    width: 142;
+    height: 260px;
+    transition: all .3s ease;
+    cursor: pointer;
+    color: #bfbebc; }
+    .card:last-child {
+      margin-right: 0; }
+    .card:hover {
+      transform: scale(1.05); }
+    .card img {
+      cursor: pointer; }
+    .card h3 {
+      font-family: "mortal_kombat_1regular", "Helvetica Neue", "Helvetica", sans-serif;
+      font-size: 18px;
+      text-transform: uppercase;
+      position: absolute;
+      top: 203px;
+      width: 142px; }
+    .card h4 {
+      font-family: "mortal_kombat_1regular", "Helvetica Neue", "Helvetica", sans-serif;
+      text-transform: uppercase;
+      position: absolute;
+      top: 235px;
+      width: 142px; }
+  /* End Fighter Card */
