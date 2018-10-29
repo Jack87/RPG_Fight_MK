@@ -13,4 +13,4 @@ In order to win you must defeat all other fighters. Must choose your
 fighter and opponents wisely to make it through to the end or you lose.
 ![screenshot](https://raw.githubusercontent.com/Jack87/RPG_Fight_MK/master/assets/images/screenShotFightScreen.PNG)
 
-####Good Luck! Have fun!
+### Good Luck! Have fun!
