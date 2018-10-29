@@ -55,11 +55,10 @@ var fighters = {
         "soundWinSrc"    : "assets/sounds/liuKangWins.mp3",
         "soundPickSrc"   : "assets/sounds/pickLiuKang.mp3"}
 }
-console.log(fighters);
-console.log(Object.keys(fighters).length);
+
 // Setup page for Game //
 $(document).ready(function(){
-    
+    state.choosePlayer = true; // Set game state to choose fighters
     transTo("selectionScreen");
     renderCards();
   
@@ -94,7 +93,38 @@ function playSound(src){
         audio.remove(); //Remove when played.
     };
     document.body.appendChild(audio);
-}; //End Play Sound Function
+}; //End Play Sound Function //
+
+// Switches game modes and handles transitions s = state, w (optional) = win //
+function stateSwitcher(s, w) {
+    if(s==="attack") {
+        for (var key in state){
+            state[key] = false};
+        state.attack = true;  
+        setArena();
+        transTo("arenaScreen");
+    } else if (s==="chooseOpp") {
+        for (var key in state){
+            state[key] = false};
+        state.chooseOpp = true;  
+        transTo("selectionScreen");
+    } else if (s==="gameOver") {
+        renderGameOver(w);
+        for (var key in state){
+            state[key] = false};
+        state.gameOver = true;  
+        transTo("endGameScreen");
+    }
+    console.log("Current state: " + getGameState());
+} // End State Switcher //
+
+// Get Current Game State // 
+function getGameState() {
+    for(var key in state) {
+        var value = state[key];
+        if (value) {return key};  
+    }
+} // End current game state //
 
 // Selection Screen Feedback //
 function feedBack(s) {$("#selectionFeedBack").text(s)};
@@ -129,12 +159,13 @@ function feedBack(s) {$("#selectionFeedBack").text(s)};
       $("#fighters").append(card);
       console.log(card.css({"margin-top":"67px"}))
     }
-  }
-  // Handles the selection of fighters //
-  function chooseCharacter(c){
+} // End card display //
+
+// Handles the selection of fighters //
+function chooseCharacter(c){
     var id = $(c).attr("id");
     var fighter = Object.keys(fighters)[id];
-    if (state === "choosePlayer") {
+    if (state.choosePlayer) {
       player = "";
       player = fighters[fighter];
       // Don't allow any more clicking on that card...
@@ -144,7 +175,7 @@ function feedBack(s) {$("#selectionFeedBack").text(s)};
       // switch states...
       stateSwitcher("chooseOpp");
       feedBack("Choose Your Opponent");
-    } else if (state === "chooseOpp") {
+    } else if (state.chooseOpp) {
       opponent = fighters[fighter];
       // Don't allow any more clicking on that card...
       $(c).addClass("disable opponent");
@@ -153,38 +184,7 @@ function feedBack(s) {$("#selectionFeedBack").text(s)};
       // switch states...
       stateSwitcher("attack");
     }
-}
-
-// Switches game modes and handles transitions s = state, w (optional) = win //
- function stateSwitcher(s, w) {
-    if(s==="attack") {
-        for (var key in state){
-            state[key] = false};
-        state.attack = true;  
-        setArena();
-        transTo("arenaScreen");
-    } else if (s==="chooseOpp") {
-        for (var key in state){
-            state[key] = false};
-        state.chooseOpp = true;  
-        transTo("selectionScreen");
-    } else if (s==="gameOver") {
-        renderGameOver(w);
-        for (var key in state){
-            state[key] = false};
-        state.gameOver = true;  
-        transTo("endGameScreen");
-    }
-    console.log("Current state: " + getGameState());
-}
-
-// Get Current Game State // 
-function getGameState() {
-    for(var key in state) {
-        var value = state[key];
-        if (value) {return key};  
-    }
-}
+} // End fighter selection //
 
 // Transition to a target screen (t) //
 function transTo(t) {
@@ -197,7 +197,7 @@ function transTo(t) {
       });
     }
     curScreen = t;
-}
+} // End Screen Transition //
   
  // Populates arena with fighters //
  function setArena() {
@@ -236,8 +236,48 @@ function transTo(t) {
   }, 1000);
     console.log("Arena rendered");
     $("#attack").removeClass("disabled"); // Disable attack button
-}
- 
+} // End Arena population //
+
+// Attack sequence //
+function attack() {
+    if(state.attack) {
+      opponent.hp = opponent.hp - player.damage;
+      player.hp = player.hp - opponent.damage;
+      // Update HP display
+      if (player.hp > 0) {
+        $(".player .hp").html(player.hp + " HP");
+      } else {
+        $(".player .hp").text("DEFEATED");
+      }
+      if (opponent.hp > 0) {
+        $(".opponent .hp").html(opponent.hp + " HP");
+      } else {
+        $(".opponent .hp").text("DEFEATED");
+      }
+      playSound(player.soundAttackSrc);
+      $("#arena #battleFeedBack").html("You attacked for " + player.damage + " damage. <br>");
+      $("#attack").addClass("disabled");
+      setTimeout(function () {
+        $("#arena #battleFeedBack").append(opponent.name + " attacked for " + opponent.damage + " damage. ");
+        playSound(opponent.soundAttackSrc);
+        $("#attack").removeClass("disabled");
+        // Opponent defeated?
+    }, 700);
+      // Increase player attack power by dmgInc amount
+      player.damage += player.dmgInc;
+      // Opponent defeated?
+      if(opponent.hp <= 0) {
+        setTimeout(function () {
+          roundVictory();
+        }, 700);
+      } else if (player.hp <= 0) {
+        setTimeout(function () {
+          gameLose();
+        }, 700);
+      }
+    }
+} // End Attack
+
 // Round victory sequence //
 function roundVictory() {
     // Player gets boost to damange
@@ -269,7 +309,7 @@ function roundVictory() {
       }
       $(".opponentFightar").remove();
     });
-}
+} // End Victory // 
 
 // Renders the game over screen //
 function renderGameOver(w) {
@@ -285,7 +325,7 @@ function renderGameOver(w) {
     $(".fighting.player.endGame").css({"left":"85px", "top":"10px"});
     $("#reset").show('slow');
     console.log("Game Over rendered");
-}
+}// End Game Over Render
 // Gameover Losing //
 function gameLose() {
     playSound(opponent.soundWinSrc);
