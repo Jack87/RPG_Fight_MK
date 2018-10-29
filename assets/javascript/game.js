@@ -60,7 +60,6 @@ console.log(Object.keys(fighters).length);
 // Setup page for Game //
 $(document).ready(function(){
     
-    stateSwitcher("attack")
     transTo("selectionScreen");
     renderCards();
   
@@ -186,6 +185,19 @@ function getGameState() {
         if (value) {return key};  
     }
 }
+
+// Transition to a target screen (t) //
+function transTo(t) {
+    if(curScreen !== t) {
+      console.log("Transitioning to " + t);
+      $("html, body").animate({
+          scrollTop: $("#"+t).offset().top
+      }, 1000, "easeInOutCubic", function(){
+        console.log("Transition complete");
+      });
+    }
+    curScreen = t;
+}
   
  // Populates arena with fighters //
  function setArena() {
@@ -193,24 +205,24 @@ function getGameState() {
     
     // If player card doesn't already exist...
     if ($("#battleStage .player").length === 0) {
-      var fightar = $("<div>")
-      fightar.addClass("playerFightar").append("<img src='"+fighters[player.id].fightar+"' height='450'>").appendTo("#battleStage");
-      fightar.css({"height":"100px", "width":"auto",
+      var fightarP = $("<div>")
+      fightarP.addClass("playerFightar").append("<img src='" + player.fightar +"' height='450'>").appendTo("#battleStage");
+      fightarP.css({"height":"100px", "width":"auto",
                    "position":"relative", "right":"500px", "top":"-355px"});
-      $("#fighters #"+player.id).clone().addClass('fighting').appendTo("#battleStage");
+      $("#fighters #" + player.id).clone().addClass('fighting').appendTo("#battleStage");
     }    
     // If opponent card doesn't already exist...
     if ($("#battleStage .opponent").length === 0) {
-      $("#fighters #"+opponent.id).clone().addClass('fighting').appendTo("#battleStage");
+      $("#fighters #" + opponent.id).clone().addClass('fighting').appendTo("#battleStage");
       var fightarO = $("<div>")
-      fightarO.addClass("opponentFightar").append("<img src='"+fighters[opponent.id].fightar+"' height='450'>").appendTo("#battleStage");
+      fightarO.addClass("opponentFightar").append("<img src='" + opponent.fightar + "' height='450'>").appendTo("#battleStage");
       fightarO.css({"height":"100px", "width":"auto",
                     "position":"relative", "left":"500px", "top":"-720px",
                     "transform":"scaleX(-1)"});
     } else {
       var fightarO = $("<div>")
-      $("#battleStage .opponent").replaceWith($("#fighters #"+opponent.id).clone().addClass('fighting'));
-      fightarO.addClass("opponentFightar").append("<img src='"+fighters[opponent.id].fightar+"' height='450'>").appendTo("#battleStage");
+      $("#battleStage .opponent").replaceWith($("#fighters #" + opponent.id).clone().addClass('fighting'));
+      fightarO.addClass("opponentFightar").append("<img src='" + opponent.fightar + "' height='450'>").appendTo("#battleStage");
       fightarO.css({"height":"100px", "width":"auto",
                     "position":"relative", "left":"500px", "top":"-720px",
                     "transform":"scaleX(-1)"});
@@ -224,8 +236,41 @@ function getGameState() {
   }, 1000);
     console.log("Arena rendered");
     $("#attack").removeClass("disabled"); // Disable attack button
-  }
+}
  
+// Round victory sequence //
+function roundVictory() {
+    // Player gets boost to damange
+    player.damage += damageBoost;
+    $("#arena #battleFeedBack").append("<br>You defeated " + opponent.name + "!");
+    // Add defeated class to opponent in character selection screen
+    $("#fighters .opponent").addClass("defeated");
+    // Disable attack button
+    $("#attack").addClass("disabled");
+    // console.log("You won the round!");
+    $(".opponentFightar").animate({opacity: 0}),
+    $("#battleStage .opponent").animate({
+        opacity: 0
+    }, 2000, "easeInOutCubic", function(){
+      console.log("Fade out complete");
+      // Are there more opponents left?
+      // Count character cards with a "disabled" class
+      // If equal to total number of fighters, no one's left to fight
+      console.log("Number of disabled cards: " + $("#fighters .disable").length);
+      if($("#fighters .disable").length===Object.keys(fighters).length) {
+        console.log("There are no more opponents.");
+        playSound("assets/sounds/wellDone.mp3");
+        setTimeout(function () {
+          gameWin();
+        }, 700);
+      } else {
+        console.log("There are more opponents to fight.");
+        stateSwitcher("chooseOpp");
+      }
+      $(".opponentFightar").remove();
+    });
+}
+
 // Renders the game over screen //
 function renderGameOver(w) {
     if ($("#showcase .card").length===0) {
@@ -241,16 +286,15 @@ function renderGameOver(w) {
     $("#reset").show('slow');
     console.log("Game Over rendered");
 }
+// Gameover Losing //
 function gameLose() {
     playSound(opponent.soundWinSrc);
     console.log("You died. Game over.");
     stateSwitcher("gameOver", false);
-  }
-  /**
-  * Game over sequence - Winning outcome
-  */
-  function gameWin() {
+}
+// Gameover Winning //
+function gameWin() {
     playSound(player.soundWinSrc);
     console.log("You win!");
     stateSwitcher("gameOver", true);
-  }
+}

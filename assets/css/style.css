@@ -71,13 +71,13 @@
   /* End Classes as Properties */
   
   /* Wrapper */
-  .wrapper {
+  #wrapper {
     display: none;
     background: url("../images/bg_MK_Pit.jpg");
     background-position: center center;
     background-size: cover;
     background-attachment: fixed; }
-   .container {
+   #container {
       position: relative;
       width: 960px;
       margin: 0 auto;
