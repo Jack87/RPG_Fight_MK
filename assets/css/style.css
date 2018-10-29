@@ -141,7 +141,8 @@
               left: 100px; }
           #arena #attack {
             position: relative;
-            top: 180px; }
+            top: 180px; 
+            z-index: 2000; }
         /* End Arena */
       
       /* End Game */
