@@ -14,4 +14,3 @@ fighter and opponents wisely to make it through to the end or you lose.
 ![screenshot](https://jack87.github.io/RPG_Fight_MK/screenShotFightScreen.PNG)
 
 Good Luck! Have fun!
-
