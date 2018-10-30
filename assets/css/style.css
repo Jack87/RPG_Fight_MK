@@ -169,7 +169,8 @@
             transform: scale(1.2); }
           #gameOver #reset {
             position: relative;
-            top: 495px; }
+            top: 495px; 
+            z-index: 2000; }
       /* End End Game */
   /* End Wrapper */
   
