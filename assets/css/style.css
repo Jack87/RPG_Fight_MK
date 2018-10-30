@@ -101,7 +101,8 @@
           color: #88ff00;
           text-shadow: 2px 5px 5px #140d34;
           font-size: 42px;
-          margin-bottom: 20px; }
+          margin-bottom: 20px; 
+          z-index: 1500; }
         #fighters {
           background: url("../images/MK_Choose_Fighter960px.png");
           position: relative;
@@ -126,7 +127,8 @@
             line-height: 36px;
             color: #88ff00;
             text-shadow: 2px 5px 5px #140d34;
-            font-size: 32px; }
+            font-size: 32px; 
+            z-index: 1500; }
           #battleStage {
             position: relative;
             top: 485px; }
@@ -161,7 +163,8 @@
             color: #88ff00;
             text-shadow: 2px 5px 5px #140d34;
             font-size: 42px; 
-            margin-bottom: 15px;}
+            margin-bottom: 15px;
+            z-index: 1500; }
           #gameOver #showcase {
             position: relative;
             top: 435px;
