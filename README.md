@@ -4,6 +4,7 @@
 
 You select your fighter and opponent at start of game. 
 ![screenshot](https://raw.githubusercontent.com/Jack87/RPG_Fight_MK/master/assets/images/screenShotChooseFighter.PNG)
+[Click here to Play Now!](https://jack87.github.io/RPG_Fight_MK/)
 
 On the fight screen itself you get a turn to attack.
 After attacking you wait for opponent attack turn based RPG style.
